@@ -42,7 +42,7 @@
         style="@style/Widget.AppCompat.Button"
         app:layout_anchorGravity="center_vertical|right"
         android:layout_gravity="center_vertical|right"
-        android:onClick="generateWallet (MainActivity)" />
+        android:onClick="generateWallet" />
     <Button
         android:text="Delete Wallet"
         android:layout_height="wrap_content"
@@ -50,6 +50,7 @@
         android:layout_width="match_parent"
         style="@style/Widget.AppCompat.Button"
         app:layout_anchorGravity="center_vertical|right"
+        android:onClick="deleteWallet"
         android:layout_gravity="center_vertical|right" />
     <Button
         android:text="Get Balance"

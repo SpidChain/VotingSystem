@@ -60,26 +60,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void generateWallet(View view) {
-        Log.d("ciro","ciro");
-        /*
         File file = getApplicationContext().getFilesDir();
         try {
-            WalletUtils.generateNewWalletFile("myWallet", file, FALSE);
+            this.walletPath = WalletUtils.generateNewWalletFile("myWallet", file, FALSE);
             Log.d("Creating wallet: ", walletPath);
         } catch (CipherException | IOException | InvalidAlgorithmParameterException |
                 NoSuchAlgorithmException | NoSuchProviderException e) {
             // This block is to catch divide-by-zero error
             Log.e("Error", "cannot create wallet");
         }
-        */
-
     }
-/*
+
     public void deleteWallet(View view) {
-        File file = new File(walletPath);
         Log.d("Deleting wallet: ", walletPath);
-        file.delete();
-
+        if (getApplicationContext().deleteFile(this.walletPath)) {
+            Log.d("Deleting wallet: ", "done");
+        } else {
+            Log.d("Deleting wallet: ", "error");
+        }
     }
-    */
 }
