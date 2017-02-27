@@ -12,12 +12,21 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.concurrent.ExecutionException;
 
 import org.web3j.crypto.CipherException;
+import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.Web3jFactory;
+import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.http.HttpService;
 
 import static java.lang.Boolean.*;
 //import static java.lang.Boolean.TRUE;
@@ -79,4 +88,21 @@ public class MainActivity extends AppCompatActivity {
             Log.d("Deleting wallet: ", "error");
         }
     }
+
+    public void getBalance(View view) {
+        File filesDir = getApplicationContext().getFilesDir();
+        Web3j web3 = Web3jFactory.build(new HttpService());
+        try {
+            Credentials credentials = WalletUtils.loadCredentials("myWallet", getApplicationContext().getFileStreamPath(this.walletPath).getPath());
+            try {
+                EthGetBalance balance = web3.ethGetBalance(credentials.getAddress(), DefaultBlockParameterName.LATEST).sendAsync().get();
+                Log.d("Balance", balance.getBalance().toString());
+            } catch (InterruptedException | ExecutionException e) {
+                Log.e("Error", e.toString());
+            }
+        } catch (CipherException | IOException e) {
+            Log.e("Credentials", "unable to get credentials");
+        }
+
+     }
 }

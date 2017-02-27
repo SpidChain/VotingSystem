@@ -59,6 +59,7 @@
         android:id="@+id/get_balance"
         style="@style/Widget.AppCompat.Button"
         android:visibility="visible"
+        android:onClick="getBalance"
         android:layout_weight="1" />
 </LinearLayout>
 
