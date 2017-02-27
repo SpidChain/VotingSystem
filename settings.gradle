@@ -1,1 +1,1 @@
-include ':VotingSystem', ':mytestlibrary'
+include ':VotingSystem'
