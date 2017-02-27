@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void getBalance(View view) {
         File filesDir = getApplicationContext().getFilesDir();
-        Web3j web3 = Web3jFactory.build(new HttpService());
+        Web3j web3 = Web3jFactory.build(new HttpService("http://10.0.2.2:8545"));
         try {
             Credentials credentials = WalletUtils.loadCredentials("myWallet", getApplicationContext().getFileStreamPath(this.walletPath).getPath());
             try {
