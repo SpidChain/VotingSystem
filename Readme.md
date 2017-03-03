@@ -1,3 +1,7 @@
+Ethereum Voting System
+======================
+A dapp, library and smart contract to notarize votes on the ethereum blockchain.
+
 How to compile contracts
 ------------------------
 
