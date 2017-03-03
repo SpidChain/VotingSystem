@@ -119,13 +119,30 @@ public class MainActivity extends AppCompatActivity {
         Web3j web3 = Web3jFactory.build(new HttpService("http://10.0.2.2:8545"));
         try {
             Credentials credentials = WalletUtils.loadCredentials("myWallet", getApplicationContext().getFileStreamPath(this.walletPath).getPath());
-            Future<MetaCoin> metacoin = MetaCoin.deploy(web3, credentials, GAS_PRICE, new BigInteger("1000000000"), BigInteger.ZERO);
+            Future<MetaCoin> metacoin = MetaCoin.deploy(web3, credentials, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO);
             this.metacoin = metacoin.get();
             String addr = this.metacoin.getContractAddress();
             Log.d("MetaCoin address", addr);
-            Uint256 balance = this.metacoin.getBalance(new Address(addr)).get();
-            Log.d("Balance", balance.toString());
+            Uint256 balance = this.metacoin.getBalance(new Address(credentials.getAddress())).get();
+            Log.d("Balance", balance.getValue().toString());
          } catch(IOException | CipherException | InterruptedException | ExecutionException e) {
+            Log.e("Error", e.toString());
+        }
+    }
+
+    public void sendMetaCoins(View view) {
+        Web3j web3 = Web3jFactory.build(new HttpService("http://10.0.2.2:8545"));
+        String receivingAddr = "0x16826c6f66d933eaf3476de0da53bb19ba171863";
+        try {
+            Credentials credentials = WalletUtils.loadCredentials("myWallet", getApplicationContext().getFileStreamPath(this.walletPath).getPath());
+            String sendingAddr = credentials.getAddress();
+            this.metacoin.sendCoin(new Address("0x16826c6f66d933eaf3476de0da53bb19ba171863"),new Uint256(new BigInteger("10"))).get();
+            Uint256 senderBalance = this.metacoin.getBalance(new Address(sendingAddr)).get();
+            Uint256 receiverBalance = this.metacoin.getBalance(new Address(receivingAddr)).get();
+            Log.d("sender balance: ",senderBalance.getValue().toString());
+            Log.d("receiver balance: ", receiverBalance.getValue().toString());
+
+        } catch(IOException | CipherException | InterruptedException | ExecutionException e) {
             Log.e("Error", e.toString());
         }
     }

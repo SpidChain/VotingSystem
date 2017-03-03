@@ -67,6 +67,12 @@
         android:text="Deploy MetaCoin"
         android:onClick="deployMetaCoin"
         />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send MetaCoins"
+        android:onClick="sendMetaCoins"
+        />
 </LinearLayout>
 
 
