@@ -35,7 +35,7 @@ import rx.functions.Func1;
  * <p>Generated with web3j version 2.0.1.
  */
 public final class MetaCoin extends Contract {
-    private static final String BINARY = "6060604052341561000c57fe5b5b600160a060020a033216600090815260208190526040902061271090555b5b61022f8061003b6000396000f300606060405263ffffffff60e060020a6000350416637bd703e8811461003757806390b98a1114610065578063f8b2cb4f14610098575bfe5b341561003f57fe5b610053600160a060020a03600435166100c6565b60408051918252519081900360200190f35b341561006d57fe5b610084600160a060020a036004351660243561014c565b604080519115158252519081900360200190f35b34156100a057fe5b610053600160a060020a03600435166101e4565b60408051918252519081900360200190f35b600073__ConvertLib.sol:ConvertLib_____________6396e4ee3d6100eb846101e4565b60026000604051602001526040518363ffffffff1660e060020a028152600401808381526020018281526020019250505060206040518083038186803b151561013057fe5b60325a03f4151561013d57fe5b5050604051519150505b919050565b600160a060020a03331660009081526020819052604081205482901015610175575060006101de565b600160a060020a0333811660008181526020818152604080832080548890039055938716808352918490208054870190558351868152935191937fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef929081900390910190a35060015b92915050565b600160a060020a0381166000908152602081905260409020545b9190505600a165627a7a72305820f30a8e61f78d6b10fe09fc792624fd2e8ba12fcf63b5fd58263c3b706961e71f0029";
+    private static final String BINARY = "6060604052341561000c57fe5b5b612710600060003273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505b5b6102b9806100646000396000f30060606040526000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806390b98a1114610046578063f8b2cb4f1461009d575bfe5b341561004e57fe5b610083600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919080359060200190919050506100e7565b604051808215151515815260200191505060405180910390f35b34156100a557fe5b6100d1600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610243565b6040518082815260200191505060405180910390f35b600081600060003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020541015610139576000905061023d565b81600060003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254039250508190555081600060008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600082825401925050819055508273ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef846040518082815260200191505060405180910390a3600190505b92915050565b6000600060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205490505b9190505600a165627a7a72305820f604221bc5fa394b3af4dc2914ee4e86cb39465959a5b5c73a4e8e69707292700029\n";
 
     private MetaCoin(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
         super(contractAddress, web3j, credentials, gasPrice, gasLimit);
@@ -80,19 +80,16 @@ public final class MetaCoin extends Contract {
         });
     }
 
-    public Future<TransactionReceipt> getBalanceInEth(Address addr) {
-        Function function = new Function("getBalanceInEth", Arrays.<Type>asList(addr), Collections.<TypeReference<?>>emptyList());
-        return executeTransactionAsync(function);
-    }
-
     public Future<TransactionReceipt> sendCoin(Address receiver, Uint256 amount) {
         Function function = new Function("sendCoin", Arrays.<Type>asList(receiver, amount), Collections.<TypeReference<?>>emptyList());
         return executeTransactionAsync(function);
     }
 
-    public Future<TransactionReceipt> getBalance(Address addr) {
-        Function function = new Function("getBalance", Arrays.<Type>asList(addr), Collections.<TypeReference<?>>emptyList());
-        return executeTransactionAsync(function);
+    public Future<Uint256> getBalance(Address addr) {
+        Function function = new Function("getBalance", 
+                Arrays.<Type>asList(addr), 
+                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
+        return executeCallSingleValueReturnAsync(function);
     }
 
     public static Future<MetaCoin> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initialValue) {

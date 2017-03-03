@@ -17,7 +17,10 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
+import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
@@ -26,13 +29,19 @@ import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 
+import rx.Completable;
+
 import static java.lang.Boolean.*;
+import static org.web3j.tx.Contract.GAS_LIMIT;
+import static org.web3j.tx.ManagedTransaction.GAS_PRICE;
 //import static java.lang.Boolean.TRUE;
 
 public class MainActivity extends AppCompatActivity {
     String walletPath;
+    MetaCoin metacoin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,4 +114,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
      }
+
+    public void deployMetaCoin(View view) {
+        Web3j web3 = Web3jFactory.build(new HttpService("http://10.0.2.2:8545"));
+        try {
+            Credentials credentials = WalletUtils.loadCredentials("myWallet", getApplicationContext().getFileStreamPath(this.walletPath).getPath());
+            Future<MetaCoin> metacoin = MetaCoin.deploy(web3, credentials, GAS_PRICE, new BigInteger("1000000000"), BigInteger.ZERO);
+            this.metacoin = metacoin.get();
+            String addr = this.metacoin.getContractAddress();
+            Log.d("MetaCoin address", addr);
+            Uint256 balance = this.metacoin.getBalance(new Address(addr)).get();
+            Log.d("Balance", balance.toString());
+         } catch(IOException | CipherException | InterruptedException | ExecutionException e) {
+            Log.e("Error", e.toString());
+        }
+    }
 }
